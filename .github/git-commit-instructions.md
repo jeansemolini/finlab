@@ -1,0 +1,11 @@
+"Utilize o idioma português do Brasil para todas as mensagens de commit.",
+"Gere o commit de forma clara e concisa, resumindo as alterações feitas no código.",
+"Use o tempo verbal no imperativo (por exemplo, 'Adiciona', 'Corrige', 'Remove').",
+"Utilize o padrão de semantica para versionamento de commits, como 'feat', 'fix', 'docs', 'style', 'refactor', 'test', 'chore'.",
+"Limite a linha do título do commit a 50 caracteres.",
+"Separe o titulo do corpo do commit com uma linha em branco.",
+"No corpo do commit, forneça uma descrição detalhada das alterações, se necessário.",
+"Adicione uma linha vazia no final do commit.",
+"Use listas com marcadores ou numeração para organizar informações no corpo do commit, se aplicável.",
+"Evite mensagens genéricas como 'atualiza código' ou 'faz mudanças'.",
+"Revise a mensagem do commit antes de finalizar para garantir clareza e precisão. - Exemplos:\n\n- feat: Adiciona funcionalidade de login com redes sociais\n- fix: Corrige bug na validação do formulário de cadastro\n- docs: Atualiza documentação da API de usuários\n- style: Formata código conforme padrão de estilo\n- refactor: Refatora componente de lista para melhorar performance\n- test: Adiciona testes unitários para o serviço de autenticação\n- chore: Atualiza dependências do projeto"
