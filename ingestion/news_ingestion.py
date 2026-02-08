@@ -4,8 +4,8 @@ import uuid
 from dotenv import load_dotenv
 from fastembed import LateInteractionTextEmbedding, SparseTextEmbedding, TextEmbedding
 from qdrant_client import QdrantClient, models
-from utils.edgar_client import EdgarClient
-from utils.semantic_chunker import SemanticChunker
+from utils.news_client import NewsClient
+from utils.simple_chunker import SimpleChunker
 
 load_dotenv()
 
@@ -14,34 +14,29 @@ SPARSE_MODEL = "Qdrant/bm25"
 COLBERT_MODEL = "colbert-ir/colbertv2.0"
 COLLECTION_NAME = "financial"
 MAX_TOKENS = 300
-EMAIL = "jean.maiko@hotmail.com"
 
 qdrant = QdrantClient(
     url=os.getenv("QDRANT_URL"),
     api_key=os.getenv("QDRANT_API_KEY"),
 )
 
-edgar = EdgarClient(email=EMAIL)
+news_client = NewsClient()
+news_data = news_client.fetch_news("IBM", max_stories=10)
 
-data_10k = edgar.fetch_filing_data("IBM", "10-K")
-text_10k = edgar.get_combined_text(data_10k)
-
-data_10q = edgar.fetch_filing_data("IBM", "10-Q")
-text_10q = edgar.get_combined_text(data_10q)
-
-chunker = SemanticChunker(max_tokens=MAX_TOKENS)
+chunker = SimpleChunker(max_tokens=MAX_TOKENS)
 
 all_chunks = []
-for data, text in [(data_10k, text_10k), (data_10q, text_10q)]:
-    chunks = chunker.create_chunks(text)
+for article in news_data:
+    chunks = chunker.create_chunks(article["text"])
     for chunk in chunks:
-        all_chunks.append({"text": chunk, "metadata": data["metadata"]})
+        all_chunks.append({"text": chunk, "metadata": article["metadata"]})
 
 dense_model = TextEmbedding(DENSE_MODEL)
 sparse_model = SparseTextEmbedding(SPARSE_MODEL)
 colbert_model = LateInteractionTextEmbedding(COLBERT_MODEL)
 
 points = []
+
 for chunk_data in all_chunks:
     chunk = chunk_data["text"]
     metadata = chunk_data["metadata"]
